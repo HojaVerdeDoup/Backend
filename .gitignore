@@ -1,0 +1,53 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+jspm_packages/
+
+# Build output
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Test coverage
+coverage/
+
+# PM2 logs and pids
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# dotenv backup
+.env.backup
+
+# Optional: ignore database/local storage
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+
+# Optional: ignore uploads (if handled locally)
+uploads/
