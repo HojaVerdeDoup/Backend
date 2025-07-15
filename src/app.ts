@@ -1,3 +1,5 @@
+//Ruta: src/app.ts (ACTUALIZAR ARCHIVO EXISTENTE)
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -6,6 +8,8 @@ import rateLimit from 'express-rate-limit';
 
 import { config } from './infrastructure/config/environment';
 import { authRoutes } from '@/presentation/routes/auth';
+import { empresaRoutes } from '@/presentation/routes/empresas';
+import { sucursalRoutes } from '@/presentation/routes/sucursales';
 import { errorHandler, notFoundHandler } from '@/presentation/middleware/errorHandler';
 
 const app = express();
@@ -54,12 +58,19 @@ app.get('/health', (req, res) => {
     message: 'Servidor funcionando correctamente',
     timestamp: new Date().toISOString(),
     environment: config.nodeEnv,
-    version: process.env.npm_package_version || '1.0.0'
+    version: process.env.npm_package_version || '1.0.0',
+    features: {
+      auth: '✅ Autenticación JWT',
+      empresas: '✅ Gestión de Empresas',
+      sucursales: '✅ Gestión de Sucursales'
+    }
   });
 });
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/empresas', empresaRoutes);
+app.use('/api/sucursales', sucursalRoutes);
 
 // 404 handler
 app.use(notFoundHandler);
