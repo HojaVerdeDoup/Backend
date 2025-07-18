@@ -1,6 +1,8 @@
+// Ruta: src/application/use-cases/auth/LoginUseCase.ts (ACTUALIZAR ARCHIVO EXISTENTE)
+
 import { IUsuarioRepository } from '@/domain/repositories/IUsuarioRepository';
 import { AuthConfig, JWTPayload } from '@/infrastructure/config/auth';
-import { LoginDTO, AuthResponseDTO, UsuarioResponseDTO } from '@/application/dtos/UsuarioDTO';
+import { LoginDTO, AuthResponseDTO, UsuarioProfileDTO, getUserRoleDescription, getUserPermissions } from '@/application/dtos/UsuarioDTO';
 import { UnauthorizedError } from '@/shared/errors/AppError';
 
 export class LoginUseCase {
@@ -44,27 +46,32 @@ export class LoginUseCase {
     // Actualizar último login
     await this.usuarioRepository.updateLastLogin(usuario.id);
 
-    // Mapear respuesta
-    const userResponse: UsuarioResponseDTO = {
+    // Obtener permisos del usuario
+    const permisos = getUserPermissions(usuario.rol);
+
+    // Mapear respuesta con UsuarioProfileDTO
+    const userProfile: UsuarioProfileDTO = {
       id: usuario.id,
-      empresa_id: usuario.empresa_id,
-      sucursal_id: usuario.sucursal_id,
       email: usuario.email,
       nombres: usuario.nombres,
       apellidos: usuario.apellidos,
       nombre_completo: `${usuario.nombres} ${usuario.apellidos}`,
       rol: usuario.rol,
-      activo: usuario.activo,
+      empresa_nombre: 'N/A', // Se obtendrá en implementación real
+      sucursal_nombre: usuario.sucursal_id ? 'N/A' : undefined,
+      telefono: usuario.telefono,
+      direccion: usuario.direccion,
+      fecha_nacimiento: usuario.fecha_nacimiento?.toISOString().split('T')[0],
       ultimo_login: usuario.ultimo_login,
-      created_at: usuario.created_at,
-      updated_at: usuario.updated_at
+      permisos
     };
 
     return {
-      user: userResponse,
+      user: userProfile,
       token,
       refreshToken,
-      expiresIn: '7d'
+      expiresIn: '7d',
+      permisos
     };
   }
 }
