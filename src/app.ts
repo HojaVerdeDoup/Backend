@@ -7,11 +7,13 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 
 import { config } from './infrastructure/config/environment';
-import { authRoutes } from '@/presentation/routes/auth';
-import { empresaRoutes } from '@/presentation/routes/empresas';
-import { sucursalRoutes } from '@/presentation/routes/sucursales';
-import { usuarioRoutes } from '@/presentation/routes/usuarios'; // NUEVO
-import { errorHandler, notFoundHandler } from '@/presentation/middleware/errorHandler';
+import { authRoutes } from './presentation/routes/auth';
+import { empresaRoutes } from './presentation/routes/empresas';
+import { sucursalRoutes } from './presentation/routes/sucursales';
+import { usuarioRoutes } from './presentation/routes/usuarios';
+import { departamentoRoutes } from './presentation/routes/departamentos'; // NUEVO FASE 4
+import { areaRoutes } from './presentation/routes/areas'; // NUEVO FASE 4
+import { errorHandler, notFoundHandler } from './presentation/middleware/errorHandler';
 
 const app = express();
 
@@ -63,15 +65,20 @@ app.get('/health', (req, res) => {
     features: {
       auth: '✅ Autenticación JWT',
       empresas: '✅ Gestión de Empresas',
-      sucursales: '✅ Gestión de Sucursales',
-      usuarios: '✅ Gestión Completa de Usuarios' // NUEVO
+      sucursales: '✅ Gestión de Sucursales', 
+      usuarios: '✅ Gestión Completa de Usuarios',
+      departamentos: '✅ Departamentos con Jerarquía', // NUEVO FASE 4
+      areas: '✅ Áreas con Horarios y Ubicaciones' // NUEVO FASE 4
     },
     endpoints: {
       auth: '/api/auth',
       empresas: '/api/empresas',
       sucursales: '/api/sucursales',
-      usuarios: '/api/usuarios' // NUEVO
-    }
+      usuarios: '/api/usuarios',
+      departamentos: '/api/departamentos', // NUEVO FASE 4
+      areas: '/api/areas' // NUEVO FASE 4
+    },
+    fase_actual: 'FASE 4 - Departamentos y Áreas Completada' // NUEVO
   });
 });
 
@@ -79,7 +86,9 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/empresas', empresaRoutes);
 app.use('/api/sucursales', sucursalRoutes);
-app.use('/api/usuarios', usuarioRoutes); // NUEVO
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/departamentos', departamentoRoutes); // NUEVO FASE 4
+app.use('/api/areas', areaRoutes); // NUEVO FASE 4
 
 // 404 handler
 app.use(notFoundHandler);

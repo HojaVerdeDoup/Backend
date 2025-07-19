@@ -1,3 +1,5 @@
+// Ruta: src/shared/types/common.ts
+
 export interface BaseEntity {
   id: string;
   created_at: Date;
